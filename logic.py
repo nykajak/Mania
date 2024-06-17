@@ -194,3 +194,45 @@ class File_Manager:
                     d[main_file] = File_Manager._seeNew(main_file,backup_file,verbose)
         
         return d
+    
+        @staticmethod
+    def _checkValid(f1,f2,verbose = True):
+        with open(f1,"r") as f:
+            s1 = set(f.readlines())
+
+        with open(f2,"r") as f:
+            s2 = set(f.readlines())
+
+        if s1.issuperset(s2):
+            if verbose:
+                print(f"Compared {f1} and {f2}. All OK.")
+            return True
+
+        res = s2.difference(s1)
+        if verbose:
+            print(f"Compared {f1} and {f2}. {len(res)} discrepencies found!")
+
+        return res
+    
+    @staticmethod
+    def checkAllValid(verbose = True):
+        d = {}
+        for obj in PATHS.values():
+            if type(obj["categories"]) != dict:
+                cat_1 = PATHS[obj["categories"][0]]
+                cat_2 = PATHS[obj["categories"][1]]
+
+                for i in cat_1["categories"].keys():
+                    for j in cat_2["categories"].keys():
+                        label = f'{i}_{j}'
+                        main_file = f'{obj["path"]}{label}.txt'
+                        backup_file = f'{obj["backup"]}{label}'
+                        d[main_file] = File_Manager._checkValid(main_file,backup_file,verbose)
+            
+            else:
+                for label in obj["categories"].keys():
+                    main_file = f'{obj["path"]}{label}.txt'
+                    backup_file = f'{obj["backup"]}{label}.txt'
+                    d[main_file] = File_Manager._checkValid(main_file,backup_file,verbose)
+        
+        return d
