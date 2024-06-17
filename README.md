@@ -2,15 +2,17 @@
 
 Because you'd have to be mad to build something this niche.
 
-## Idea and motivation
+## About
+
+### Idea and motivation
 
 I had a bunch of Youtube playlists grouped by language or genre, that I wanted to be able
-to manipulate freely. Easy detection and removal of duplicates, generation of new playlists
+to manipulate freely. Easy detection of newly added and removed videos, generation of new playlists
 that are an intersection of two playlists and possibly a self made music player.
 
 Two out of three goals is not so bad. I never did make that music player.
 
-## Dependencies and working
+### Dependencies and working
 
 I have elected to use Python and the Youtube Data API v3 for retreival of information. Scripts
 were considered but were tedious to write and had to be copied to files. I am happy with the
@@ -21,7 +23,7 @@ much more reliable, but the API requires OAUTH and guzzles through the alloted q
 I elected to use a browser script that is slightly more tedious (as you have to copy paste and
 manage data yourself as well as run it several times if needed) but simpler and more secure.
 
-## For users
+## Setup and usage
 
 ### For retreiving data
 
@@ -40,7 +42,7 @@ manage data yourself as well as run it several times if needed) but simpler and 
 5. You should see a queue being created with the relevant videos in it.
 6. If not close and reopen the page and try again.
 
-## About UserSettings.json
+### About UserSettings.json
 
 1. Set the API_KEY to be the value of your Youtube data api v3 key.
 2. Set PATHS to be an object containing several sub MetricObjects
@@ -48,3 +50,10 @@ manage data yourself as well as run it several times if needed) but simpler and 
 4. Ensure that all filepaths end with /.
 5. Every basic MetricObject has a categories object,
 6. Every derived MetricObject has a categories list consisting of keys for two basic objects.
+
+### IMPORTANT TO NOTE
+
+1. The script.js is unstable and might break from DOM updates.
+2. There seems to be a limit to how many videos can fit inside a YouTube Queue (150).
+3. Script might need to be run multiple times before intended result. If so, refresh before.
+4. The queue might have a few duplicate/missing videos. Extend logic.py functionality to verify result.
