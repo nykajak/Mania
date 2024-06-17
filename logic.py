@@ -12,14 +12,17 @@ for obj in PATHS.values():
 
 class Item_Loader:
     """
-        An object of this class is used to load the required playlistItems into a list. Playlist ID should be specified
-        before calling self.loadItems(). Currently unsafe.
+        An object of this class is used to load the required playlistItems into a list. 
+        Takes in YouTube Data v3 API resource.
     """
 
     def __init__(self,youtube):
         self.youtube = youtube
 
     def loadItems(self,id):
+        """
+            Function that loads all the information from the given resource.
+        """
 
         #Loading first batch of videos.
         request = self.youtube.playlistItems().list(part = "snippet",playlistId = id,maxResults = 50)
@@ -39,8 +42,7 @@ class Item_Loader:
 
 class File_Manager:
     """
-        An object of this class is used to generate and interact with files generated using data from Item_Loader class.
-        It requires a filename attribute to target.
+        An object of this class is used to generate and interact with generated files.
     """
 
     def __init__(self):
@@ -48,7 +50,7 @@ class File_Manager:
 
     def extractIds(self,filename = None):
         """
-            Function is used to extract all the urls given filename. Returns None if filename not set.
+            Function is used to extract all the ids given filename.
         """
 
         if filename is None:
@@ -61,7 +63,7 @@ class File_Manager:
     
     def extractInfo(self,filename = None):
         """
-            Function is used to extract all the lines from filename. Returns None if filename not set.
+            Function is used to extract all the lines given filename.
         """
 
         if filename is None:
@@ -74,8 +76,7 @@ class File_Manager:
 
     def updateBasic(self,filename,res,verbose = True):
         """
-            Function is used to populate filename using the returned result. Returns None if filename not set. 
-            Not safe.
+            Function is used to populate basic filename using a list of values (res).
         """
 
         if filename is None:
@@ -98,6 +99,10 @@ class File_Manager:
         return 1
     
     def updateHybrid(self,src1,src2,destination,verbose = True):
+        """
+            Function is used to populate hybrid files (destination) using two sources src1,src2.
+        """
+
         result = self.extractInfo(src1)
         if result is None:
             if verbose:
@@ -127,6 +132,10 @@ class File_Manager:
         return 1
     
     def _saveFile(self, obj, label, verbose = True):
+        """
+            Function is used to save certain file into the corresponding backup file.
+        """
+
         src = f'{obj["path"]}{label}.txt'
         dest = f'{obj["backup"]}{label}.txt'
 
@@ -140,6 +149,10 @@ class File_Manager:
             print(f'Saved {label}.txt file')
     
     def saveFiles(self, verbose = True):
+        """
+            Function is used to save all files to backups.
+        """
+
         for obj in PATHS.values():
             if type(obj["categories"]) != dict:
                 cat_1 = PATHS[obj["categories"][0]]
@@ -155,6 +168,10 @@ class File_Manager:
     
     @staticmethod
     def _seeNew(f1,f2,verbose = True):
+        """
+            Function is used to see new records in a certain file. f1 (main file), f2 (backup file)
+        """
+
         with open(f1,"r") as f:
             s1 = set(f.readlines())
 
@@ -174,6 +191,10 @@ class File_Manager:
     
     @staticmethod
     def seeAllNew(verbose = True):
+        """
+            Function is see new records in all files.
+        """
+
         d = {}
         for obj in PATHS.values():
             if type(obj["categories"]) != dict:
@@ -197,6 +218,11 @@ class File_Manager:
     
     @staticmethod
     def _checkValid(f1,f2,verbose = True):
+        """
+            Function is check if data in main file (f1) consistent with backup (f2).
+            That is, function checks if data is superset.
+        """
+
         with open(f1,"r") as f:
             s1 = set(f.readlines())
 
@@ -216,6 +242,10 @@ class File_Manager:
     
     @staticmethod
     def checkAllValid(verbose = True):
+        """
+            Function is check that no data lost in any files.
+        """
+
         d = {}
         for obj in PATHS.values():
             if type(obj["categories"]) != dict:
@@ -238,6 +268,9 @@ class File_Manager:
         return d
     
 class Updater:
+    """
+        Class provides the instances for both other classes.
+    """
     def __init__(self):
         youtube = build("youtube","v3",developerKey=API_KEY)
 
@@ -245,6 +278,9 @@ class Updater:
         self.file_manager = File_Manager()
 
     def updateAllBasic(self, verbose = True):
+        """
+            Updates all basic files specified in UserSettings.json
+        """
         for obj in PATHS.values():
             if type(obj["categories"]) != dict:
                 continue
@@ -255,6 +291,9 @@ class Updater:
                 self.file_manager.updateBasic(filename,res,verbose)
 
     def updateAllHybrid(self, verbose = True):
+        """
+            Updates all hybrid files specified in UserSettings.json
+        """
         for obj in PATHS.values():
             if type(obj["categories"]) != list:
                 continue
@@ -270,6 +309,9 @@ class Updater:
                     self.file_manager.updateHybrid(src1,src2,dest,verbose)
 
     def updateAll(self,verbose = True):
+        """
+            Updates all files specified in UserSettings.json
+        """
         self.updateAllBasic(verbose)
         self.updateAllHybrid(verbose)
             
