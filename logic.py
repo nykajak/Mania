@@ -37,3 +37,37 @@ class Item_Loader:
 
         return items
 
+class File_Manager:
+    """
+        An object of this class is used to generate and interact with files generated using data from Item_Loader class.
+        It requires a filename attribute to target.
+    """
+
+    def __init__(self):
+        pass
+
+    def extractIds(self,filename = None):
+        """
+            Function is used to extract all the urls given filename. Returns None if filename not set.
+        """
+
+        if filename is None:
+            return None
+
+        with open(filename, "r") as f:
+            ids = [line[:11:] for line in f.readlines()]
+
+        return ids
+    
+    def extractInfo(self,filename = None):
+        """
+            Function is used to extract all the lines from filename. Returns None if filename not set.
+        """
+
+        if filename is None:
+            return None
+        
+        with open(filename,"r") as f:
+            content = f.readlines()
+        
+        return content
