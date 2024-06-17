@@ -10,6 +10,9 @@ for obj in PATHS.values():
     my_file = Path(obj["backup"])
     my_file.mkdir(parents=True, exist_ok=True)
 
+def _fileNameGenerate(dir,filename):
+    return f'{dir}{filename}.txt'
+
 class Item_Loader:
     """
         An object of this class is used to load the required playlistItems into a list. 
@@ -136,8 +139,8 @@ class File_Manager:
             Function is used to save certain file into the corresponding backup file.
         """
 
-        src = f'{obj["path"]}{label}.txt'
-        dest = f'{obj["backup"]}{label}.txt'
+        src = _fileNameGenerate(obj["path"],label)
+        dest = _fileNameGenerate(obj["backup"],label)
 
         with open(src,"r") as f:
             content = f.read()
@@ -187,7 +190,7 @@ class File_Manager:
         if verbose:
             print(f"{f1} has no new records.")
 
-        return False
+        return None
     
     @staticmethod
     def seeAllNew(verbose = True):
@@ -203,15 +206,15 @@ class File_Manager:
 
                 for i in cat_1["categories"].keys():
                     for j in cat_2["categories"].keys():
-                        label = f'{i}_{j}.txt'
-                        main_file = f'{obj["path"]}{label}'
-                        backup_file = f'{obj["backup"]}{label}'
+                        label = f'{i}_{j}'
+                        main_file = _fileNameGenerate(obj["path"],label)
+                        backup_file = _fileNameGenerate(obj["backup"],label)
                         d[main_file] = File_Manager._seeNew(main_file,backup_file,verbose)
             
             else:
                 for label in obj["categories"].keys():
-                    main_file = f'{obj["path"]}{label}.txt'
-                    backup_file = f'{obj["backup"]}{label}.txt'
+                    main_file = _fileNameGenerate(obj["path"],label)
+                    backup_file = _fileNameGenerate(obj["backup"],label)
                     d[main_file] = File_Manager._seeNew(main_file,backup_file,verbose)
         
         return d
@@ -255,14 +258,14 @@ class File_Manager:
                 for i in cat_1["categories"].keys():
                     for j in cat_2["categories"].keys():
                         label = f'{i}_{j}'
-                        main_file = f'{obj["path"]}{label}.txt'
-                        backup_file = f'{obj["backup"]}{label}'
+                        main_file = _fileNameGenerate(obj["path"],label)
+                        backup_file = _fileNameGenerate(obj["backup"],label)
                         d[main_file] = File_Manager._checkValid(main_file,backup_file,verbose)
             
             else:
                 for label in obj["categories"].keys():
-                    main_file = f'{obj["path"]}{label}.txt'
-                    backup_file = f'{obj["backup"]}{label}.txt'
+                    main_file = _fileNameGenerate(obj["path"],label)
+                    backup_file = _fileNameGenerate(obj["backup"],label)
                     d[main_file] = File_Manager._checkValid(main_file,backup_file,verbose)
         
         return d
