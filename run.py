@@ -14,3 +14,7 @@ if __name__ == "__main__":
 
     # To check if old records maintained
     # updater.file_manager.checkAllValid()
+
+    # To get urls of hybrid file
+    # filename = "./MySongs/Hybrid/malayalam_feels.txt"
+    # updater.file_manager.extractIds(filename)
