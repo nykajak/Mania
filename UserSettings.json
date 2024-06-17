@@ -1,0 +1,31 @@
+{
+    "API_KEY" : "Your API KEY",
+    "PATHS": {
+        "genre" : {
+            "path" : "./MySongs/Genre/",
+            "backup" : "./Backup/Genre/",
+            "categories":  {
+                "feels":"PLnTMXsB9wMylQyeKJ6Cou7iItEMm2bGmW",
+                "vibes":"PLnTMXsB9wMylOB8bcs-D2nWt4TThw5LBC",
+                "romantic":"PLnTMXsB9wMym2Jm5JA06XFTrGs_wMp2Vs"
+            }
+        },
+
+        "lang" : {
+            "path" : "./MySongs/Lang/",
+            "backup" : "./Backup/Lang/",
+            "categories":  {
+                "hindi":"PLnTMXsB9wMymwFtBhTgNA3vQaCxogbYGo",
+                "english":"PLnTMXsB9wMyngCbraY7L7-_6PmTl1JctX",
+                "malayalam":"PLnTMXsB9wMykvZT0d6Kudf_1VxNJIHclJ",
+                "tamil":"PLnTMXsB9wMylfIYTDVJWMeu_VDQ6mdDb3"
+            }
+        },
+
+        "hybrid": {
+            "path" : "./MySongs/Hybrid/",
+            "backup" : "./Backup/Hybrid/",
+            "categories":  ["lang","genre"]
+        }
+    }
+}
