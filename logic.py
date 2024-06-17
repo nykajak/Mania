@@ -125,3 +125,30 @@ class File_Manager:
             print()
         
         return 1
+    
+    def _saveFile(self, obj, label, verbose = True):
+        src = f'{obj["path"]}{label}.txt'
+        dest = f'{obj["backup"]}{label}.txt'
+
+        with open(src,"r") as f:
+            content = f.read()
+
+        with open(dest,"w") as f:
+            f.write(content)
+
+        if verbose:
+            print(f'Saved {label}.txt file')
+    
+    def saveFiles(self, verbose = True):
+        for obj in PATHS.values():
+            if type(obj["categories"]) != dict:
+                cat_1 = PATHS[obj["categories"][0]]
+                cat_2 = PATHS[obj["categories"][1]]
+
+                for i in cat_1["categories"].keys():
+                    for j in cat_2["categories"].keys():
+                        label = f'{i}_{j}'
+                        self._saveFile(obj,label,verbose)
+            else:
+                for label in obj["categories"].keys():
+                    self._saveFile(obj,label,verbose)
