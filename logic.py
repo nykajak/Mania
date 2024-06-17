@@ -71,3 +71,57 @@ class File_Manager:
             content = f.readlines()
         
         return content
+
+    def updateBasic(self,filename,res,verbose = True):
+        """
+            Function is used to populate filename using the returned result. Returns None if filename not set. 
+            Not safe.
+        """
+
+        if filename is None:
+            if verbose:
+                print("No file is loaded!")
+
+            return -1
+
+        count = 0
+        with open(filename,"w") as f:
+            for item in res:
+                video_id = item["snippet"]["resourceId"]["videoId"]
+                video_title = item["snippet"]["title"]
+                f.write(f"{video_id},{video_title}\n")
+                count += 1
+
+        if verbose:
+            print(f"{count} entries loaded into {filename}!")
+
+        return 1
+    
+    def updateHybrid(self,src1,src2,destination,verbose = True):
+        result = self.extractInfo(src1)
+        if result is None:
+            if verbose:
+                print("src1 is None!")
+
+            return -1
+        s1 = set(result)
+        
+        result = self.extractInfo(src2)
+        if result is None:
+            if verbose:
+                print("src2 is None!")
+            return -1
+        s2 = set(result)
+    
+        records = s1.intersection(s2)
+        if verbose:
+            print(f"{len(records)} entries found common in {src1} and {src2}!")
+
+        with open(destination,"w") as f:
+            f.writelines(records)
+
+        if verbose:
+            print(f"{len(records)} entries added to {destination}!")
+            print()
+        
+        return 1
