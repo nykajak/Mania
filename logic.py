@@ -152,3 +152,45 @@ class File_Manager:
             else:
                 for label in obj["categories"].keys():
                     self._saveFile(obj,label,verbose)
+    
+    @staticmethod
+    def _seeNew(f1,f2,verbose = True):
+        with open(f1,"r") as f:
+            s1 = set(f.readlines())
+
+        with open(f2,"r") as f:
+            s2 = set(f.readlines())
+        
+        if len(s1) > len(s2):
+            if verbose:
+                print(f"{f1} has {len(s1) - len(s2)} new records!")
+            
+            return s1.difference(s2)
+        
+        if verbose:
+            print(f"{f1} has no new records.")
+
+        return False
+    
+    @staticmethod
+    def seeAllNew(verbose = True):
+        d = {}
+        for obj in PATHS.values():
+            if type(obj["categories"]) != dict:
+                cat_1 = PATHS[obj["categories"][0]]
+                cat_2 = PATHS[obj["categories"][1]]
+
+                for i in cat_1["categories"].keys():
+                    for j in cat_2["categories"].keys():
+                        label = f'{i}_{j}.txt'
+                        main_file = f'{obj["path"]}{label}'
+                        backup_file = f'{obj["backup"]}{label}'
+                        d[main_file] = File_Manager._seeNew(main_file,backup_file,verbose)
+            
+            else:
+                for label in obj["categories"].keys():
+                    main_file = f'{obj["path"]}{label}.txt'
+                    backup_file = f'{obj["backup"]}{label}.txt'
+                    d[main_file] = File_Manager._seeNew(main_file,backup_file,verbose)
+        
+        return d
