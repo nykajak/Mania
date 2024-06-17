@@ -236,3 +236,40 @@ class File_Manager:
                     d[main_file] = File_Manager._checkValid(main_file,backup_file,verbose)
         
         return d
+    
+class Updater:
+    def __init__(self):
+        youtube = build("youtube","v3",developerKey=API_KEY)
+
+        self.item_loader = Item_Loader(youtube)
+        self.file_manager = File_Manager()
+
+    def updateAllBasic(self, verbose = True):
+        for obj in PATHS.values():
+            if type(obj["categories"]) != dict:
+                continue
+            
+            for label,id in obj["categories"].items():
+                filename = f'{obj["path"]}{label}.txt'
+                res = self.item_loader.loadItems(id)
+                self.file_manager.updateBasic(filename,res,verbose)
+
+    def updateAllHybrid(self, verbose = True):
+        for obj in PATHS.values():
+            if type(obj["categories"]) != list:
+                continue
+            
+            cat_1 = PATHS[obj["categories"][0]]
+            cat_2 = PATHS[obj["categories"][1]]
+
+            for i in cat_1["categories"].keys():
+                for j in cat_2["categories"].keys():
+                    src1 = f'{cat_1["path"]}{i}.txt'
+                    src2 = f'{cat_2["path"]}{j}.txt'
+                    dest = f'{obj["path"]}{i}_{j}.txt'
+                    self.file_manager.updateHybrid(src1,src2,dest,verbose)
+
+    def updateAll(self,verbose = True):
+        self.updateAllBasic(verbose)
+        self.updateAllHybrid(verbose)
+            
