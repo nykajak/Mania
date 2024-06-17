@@ -195,7 +195,7 @@ class File_Manager:
         
         return d
     
-        @staticmethod
+    @staticmethod
     def _checkValid(f1,f2,verbose = True):
         with open(f1,"r") as f:
             s1 = set(f.readlines())
